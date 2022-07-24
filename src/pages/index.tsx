@@ -16,13 +16,56 @@ const containerStyles = {
 }
 
 const courseSelector = {
-    width: "100%"
-    display: "flex"
+    width: "100%",
+    display: "grid",
+    background: "#999",
+    gridAutoColumns: "minmax(0, 1fr)",
+    gridAutoFlow: "column"
 }
 
-const courseHead = {
-    
+const CourseHead = (props: any) => {
+    const courseHead = {
+        background:"#CCC",
+        padding: "10px"
+    }
+
+    return (
+        <div style={{padding: "10px"}}>
+            <div style={courseHead} id={"course-head-"+props.course.id}>
+                <div style={{background: "#FFF", aspectRatio:"1/1", borderRadius:"100%"}}>
+
+                </div>
+                <h2 style={{fontSize:"90%", textAlign:"center", marginBottom:"10px"}}>{props.course.title}</h2>
+            </div>
+        </div>
+    )
 }
+
+const CourseBody = (props: any) => {
+    const courseBody = {
+
+    }
+
+    return (
+        <div style={courseBody} id={"course-body-"+props.course.id}>
+            {props.course.description}
+        </div>
+    )
+}
+
+const courses = [
+    {
+        title: "Nybörjarkurs", 
+        description: "A"
+    },
+    {
+        title: "Avancerad kurs", 
+        description: "B"},
+    {
+        title: "Watercasting", 
+        description: "C"
+    }
+]
 
 const IndexPage = () => {
     return (
@@ -31,26 +74,10 @@ const IndexPage = () => {
                 <title>Kaide course signup</title>
                 <h1>Kaide courses</h1>    
                 <div style={courseSelector}>
-                    <div style={courseHead}>
-                        Nybörjare
-                    </div>
-                    <div style={courseHead}>
-                        Avancerat
-                    </div>
-                    <div style={courseHead}>
-                        Watercasting
-                    </div>
+                    {courses.map(x => <CourseHead course={x} />)}
                 </div>
                 <div>
-                    <div style={courseBody} className="course-body">
-
-                    </div>
-                    <div style={courseBody} className="course-body">
-
-                    </div>
-                    <div style={courseBody} className="course-body">
-
-                    </div>
+                    {courses.map(x => <CourseBody course={x} />)}
                 </div>
             </div>
         </main>
