@@ -16,56 +16,65 @@ const containerStyles = {
     borderRadius: "5px"
 }
 
-const courseSelector = {
-    width: "100%",
-    display: "grid",
-    background: "#999",
-    gridAutoColumns: "minmax(0, 1fr)",
-    gridAutoFlow: "column"
-}
-
-const CourseHead = (props: any) => {
-    const courseHead = {
-        background:"#CCC",
-        padding: "10px"
+const Course = (props: any) => {
+    const courseStyles = {
+        display: "grid",
+        gridTemplateColumns: "auto 200px"
     }
 
     return (
-        <div style={{padding: "10px"}}>
-            <div style={courseHead} id={"course-head-"+props.course.id}>
-                <div style={{background: "#FFF", aspectRatio:"1/1", borderRadius:"100%"}}>
-
-                </div>
-                <h2 style={{fontSize:"90%", textAlign:"center", marginBottom:"10px"}}>{props.course.title}</h2>
+        <div style={courseStyles} id={"course-"+props.course.id}>
+            <div> 
+                <h3>{props.course.title}</h3> 
+                <ReactMarkdown components={{h1: 'h2', h2: 'h3', h3: 'h4'}} children={props.course.description} />
             </div>
+            <div>
+                { props.course.dates.map(x => {
+                    return <div style={{ }}>
+                        Kursstart {x}
+                    </div>
+                })} 
+                <button>
+                Boka
+                </button>   
+            </div> 
         </div>
     )
 }
 
-const CourseBody = (props: any) => {
-    const courseBody = {
-
-    }
-
-    return (
-        <div style={courseBody} id={"course-body-"+props.course.id}>
-            <ReactMarkdown components={{h1: 'h2', h2: 'h3', h3: 'h4'}} children={props.course.description} />
-        </div>
-    )
+const Intro = (props: any) => {
+    return (<section>
+        <ReactMarkdown components={{h1: 'h2', h2: 'h3', h3: 'h4'}} children={props.intro} />
+    </section>) 
 }
+
+const intro = `
+# För vem?
+
+Våra kurser är både för dig som redan gillar att jobba med händerna och för dig som vill testa på något nytt.
+
+Inga förkunskaper krävs. Grupperna är små med max 5 deltagare så att alla kan få individuell handledning efter sina behov. Nybörjare och mer erfarna är lika välkomna och grupperna blandas för en bra dynamik.
+
+# Innehåll
+
+Vi introducerar dig i hantverket och du lär dig använda olika verktyg och maskiner samt grundläggande arbetsmetoder.
+
+Du gör smycken efter egen design men vi hjälper dig självklart genom att bolla idéer och lösningar. Om du är nybörjare rekommenderar vi att du gör en enklare ring som ditt första projekt. Efter kursanmälan får du en lathund som beskriver arbetsprocessen steg för steg.
+# Material
+
+Alla verktyg och material ingår i kursavgiften förutom silvermaterialet som köps på plats för 18 kr/gram. Vi använder återvunnet 925 sterling silver. En enkel ring kostar cirka 40-90 kr i material. Om du har egen silverplåt eller silvertråd kan du ta med det.
+Bra att veta
+
+I kursavgiften ingår också te, kaffe och ostsmörgås. Meddela oss om allergier eller kostpreferenser. Det finns ett kök med mikro och kylskåp som du kan använda tisdagar från kl 17.30 och söndagar under hela kurstiden.
+`
 
 const courses = [
     {
         title: "Kvällskurser", 
         description: `
-# Nybörjarkurs i silversmide
-Test
-
-## Innehåll
-Vi introducerar dig i hantverket och du lär dig använda olika verktyg och maskiner samt grundläggande arbetsmetoder.
-
-Du gör smycken efter egen design men vi hjälper dig självklart genom att bolla idéer och lösningar. Om du är nybörjare rekommenderar vi att du gör en enklare ring som ditt första projekt. Efter kursanmälan får du en lathund som beskriver arbetsprocessen steg för steg.
+Kvällskurserna hålls tre åt gången och hela gruppen följs åt.
 `,
+        selection: "one",
         dates: [
             "2022-09-01",
             "2022-09-07"
@@ -73,11 +82,19 @@ Du gör smycken efter egen design men vi hjälper dig självklart genom att boll
     },
     {
         title: "Söndagskurser", 
-        description: "B"
+        selection: "many",
+        description: "B",
+        dates: [
+            "2022-09-02",
+            "2022-09-04"
+        ]
     },
     {
         title: "Specialkurser", 
-        description: "C"
+        description: "C",
+        dates:[
+
+        ]
     }
 ]
 
@@ -87,14 +104,13 @@ function Page(){
     return (
         <>
             <div style={containerStyles}>
-                <title>Kaide course signup</title>
-                <h1>Kaide courses</h1>    
-                <div style={courseSelector}>
-                    {courses.map(x => <CourseHead course={x} />)}
-                </div>
-                <div>
-                    {courses.map(x => <CourseBody course={x} />)}
-                </div>
+                <section>
+                    <Intro intro={intro}/>
+                </section> 
+        
+                <section>
+                    {courses.map(x => <Course course={x} />)}
+                </section>
             </div>
         </>
 
