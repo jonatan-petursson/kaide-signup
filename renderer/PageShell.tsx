@@ -3,31 +3,26 @@ import logo from './logo.svg'
 import { PageContextProvider } from './usePageContext'
 import type { PageContext } from './types'
 import './PageShell.css'
-import { Link } from './Link'
+import { Container, CssBaseline } from '@mui/material'
 
 export { PageShell }
 
 function PageShell({ children, pageContext }: { children: React.ReactNode; pageContext: PageContext }) {
   return (
     <React.StrictMode>
-      <PageContextProvider pageContext={pageContext}>
-        <Content>{children}</Content>
-      </PageContextProvider>
+      <CssBaseline>
+        <PageContextProvider pageContext={pageContext}>
+          <Content>{children}</Content>
+        </PageContextProvider>
+      </CssBaseline>
     </React.StrictMode>
   )
 }
 
 function Content({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      style={{
-        padding: 20,
-        paddingBottom: 50,
-        borderLeft: '2px solid #eee',
-        minHeight: '100vh',
-      }}
-    >
+    <Container maxWidth={"sm"}>
       {children}
-    </div>
+    </Container>
   )
 }
