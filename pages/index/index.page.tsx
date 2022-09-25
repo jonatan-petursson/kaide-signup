@@ -1,59 +1,66 @@
-import { Box, Button, Grid, Stack, Typography, List, ListItem, ListItemText, ListItemIcon, Radio, RadioGroup, ListItemButton, Accordion, AccordionDetails, AccordionSummary } from "@mui/material"
+import { Box, Button, Stack, List, ListItem, ListItemText, ListItemIcon, Radio, RadioGroup, Accordion, AccordionDetails, AccordionSummary, Chip } from "@mui/material"
 import { ExpandMore } from '@mui/icons-material'
 
 import React from "react"
 import ReactMarkdown from 'react-markdown'
-import { isPropertySignature } from "typescript"
+import moment from "moment"
 
-const pageStyles = {
-    color: "#232129",
-    fontFamily: "-apple-system, Roboto, sans-serif, serif",
-    width: "100%",
-    height: "100%"
+const Courses = ({ courses }: { courses: any }) => {
+    return <>
+        {courses.map((x: any) => <Course course={x} />)}
+    </>
 }
 
-const containerStyles = {
-    maxWidth: "1000px",
-    margin: "auto",
-    padding: "20px",
-    backgroundColor: "#DDD",
-    borderRadius: "5px"
+const Course = ({ course }: { course: any }) => {
+    return <Accordion key={course.id}>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+            <div>
+                <h3>{course.title}</h3>
+                <ReactMarkdown components={{ h1: 'h2', h2: 'h3', h3: 'h4' }} children={course.description} />
+            </div>
+        </AccordionSummary>
+        <AccordionDetails>
+            <form>
+                <Sessions course={course}></Sessions>
+                <Box alignContent={"left"}>
+                    
+                <Button variant={"outlined"} >
+                    Boka
+                </Button>
+                </Box>
+            </form>
+        </AccordionDetails>
+    </Accordion>
 }
 
-const Course = (props: any) => {
-    return (
-        <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore />}>
-                <div>
-                    <h3>{props.course.title}</h3>
-                    <ReactMarkdown components={{ h1: 'h2', h2: 'h3', h3: 'h4' }} children={props.course.description} />
-                </div>
-            </AccordionSummary>
-            <AccordionDetails>
-                <form>
-                    <List>
-                        <RadioGroup>
-                            {props.course.dates.map((x: any) => {
-                                const id = "course" + props.course.id + "date" + x.startDate
-                                let radio = <Radio name={"course" + props.course.id} id={id} value={x.startDate} />
-                                return <ListItem >
-                                    <ListItemIcon>
-                                        {radio}
-                                    </ListItemIcon>
-                                    <label htmlFor={id}>
-                                        <ListItemText id={"courseHeader" + props.course.id} primary={"Kursstart " + x.startDate} secondary={"Datum 2022-09-10"} />
-                                    </label>
-                                </ListItem>
-                            })}
-                        </RadioGroup>
-                    </List>
-                    <Button variant={"outlined"} >
-                        Boka
-                    </Button>
-                </form>
-            </AccordionDetails>
-        </Accordion>
-    )
+const Sessions = ({ course }: { course: any }) => {
+    return <List>
+        <RadioGroup>
+            {course.sessions.map((session: any) => <Session course={course} session={session} />)}
+        </RadioGroup>
+    </List>
+}
+
+const Session = ({ course, session }: { course: any, session: any }) => {
+    const id = "course" + course.id + "date" + session.startDate
+    let radio = <Radio name={"course" + course.id} id={id} value={session.startDate} />
+    let dateList = <Stack direction="row" spacing={1}>
+        {session.classes.map((d: any) => <Chip variant="outlined" size="small" key={id + d} label={moment(d).format("DD MMM")} />)}
+    </Stack>
+
+    return <ListItem>
+        <ListItemIcon>
+            {radio}
+        </ListItemIcon>
+        <label htmlFor={id}>
+            <ListItemText
+                id={"courseHeader" + course.id}
+                primary={session.name + " " + moment(session.startDate).format("D. MMMM")}
+                secondary={dateList} />
+        </label>
+    </ListItem>
+
+
 }
 
 const Intro = (props: any) => {
@@ -90,29 +97,29 @@ const courses = [
 Kvällskurserna hålls tre åt gången och hela gruppen följs åt. 
 `,
         selection: "one",
-        dates: [
-            { startDate: "2022-09-01" },
-            { startDate: "2022-09-07" }
+        sessions: [
+            { name: "Nybörjarkurs", startDate: "2022-09-01", classes: ["2022-09-01", "2022-09-07", "2022-09-14"] },
+            { name: "Nybörjarkurs", startDate: "2022-09-07", classes: ["2022-09-01", "2022-09-07", "2022-09-14"] }
         ]
     },
     {
         title: "Söndagskurser",
         id: "2",
         selection: "many",
-        description: "En heldag i vår ateljé, ",
-        dates: [
-            { startDate: "2022-09-04" },
-            { startDate: "2022-09-09" }
+        description: "En heldag i vår ateljé, färdigställ ett enklare smycke eller jobba på egna projekt",
+        sessions: [
+            { name: "Nybörjarkurs", startDate: "2022-09-04", classes: ["2022-09-01", "2022-09-07", "2022-09-14"] },
+            { name: "Nybörjarkurs", startDate: "2022-09-09", classes: ["2022-09-01", "2022-09-07", "2022-09-14"] }
         ]
     },
     {
         title: "Specialkurser",
         id: "3",
         selection: "one",
-        description: "",
-        dates: [
-            { startDate: "2022-09-09" },
-            { startDate: "2022-09-10" }
+        description: "Lär dig nya tekniker och experimentera med oss!",
+        sessions: [
+            { name: "Watercasting", startDate: "2022-09-09", classes: ["2022-09-01", "2022-09-07", "2022-09-14"] },
+            { name: "Nybörjarkurs", startDate: "2022-09-10", classes: ["2022-09-01", "2022-09-07", "2022-09-14"] }
         ]
     }
 ]
@@ -127,7 +134,7 @@ function Page() {
                     <Intro intro={intro} />
                 </Box>
                 <Box>
-                    {courses.map(x => <Course course={x} />)}
+                    <Courses courses={courses}></Courses>
                 </Box>
             </Stack>
         </>
