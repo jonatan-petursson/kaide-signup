@@ -4,29 +4,29 @@ import { ExpandMore } from '@mui/icons-material'
 import React from "react"
 import ReactMarkdown from 'react-markdown'
 import moment from "moment"
+import { SemanticClassificationFormat } from "typescript"
 
 const Courses = ({ courses }: { courses: any }) => {
     return <>
-        {courses.map((x: any) => <Course course={x} />)}
+        {courses.map((x: any) => <Course key={x.id} course={x} />)}
     </>
 }
 
 const Course = ({ course }: { course: any }) => {
-    return <Accordion key={course.id}>
+    return <Accordion>
         <AccordionSummary expandIcon={<ExpandMore />}>
-            <div>
+            <Box>
                 <h3>{course.title}</h3>
                 <ReactMarkdown components={{ h1: 'h2', h2: 'h3', h3: 'h4' }} children={course.description} />
-            </div>
+            </Box>
         </AccordionSummary>
         <AccordionDetails>
             <form>
                 <Sessions course={course}></Sessions>
-                <Box alignContent={"left"}>
-                    
-                <Button variant={"outlined"} >
-                    Boka
-                </Button>
+                <Box>
+                    <Button variant={"outlined"} >
+                        Boka
+                    </Button>
                 </Box>
             </form>
         </AccordionDetails>
@@ -36,7 +36,7 @@ const Course = ({ course }: { course: any }) => {
 const Sessions = ({ course }: { course: any }) => {
     return <List>
         <RadioGroup>
-            {course.sessions.map((session: any) => <Session course={course} session={session} />)}
+            {course.sessions.map((session: any) => <Session key={course.id + session.startDate} course={course} session={session} />)}
         </RadioGroup>
     </List>
 }
@@ -55,8 +55,8 @@ const Session = ({ course, session }: { course: any, session: any }) => {
         <label htmlFor={id}>
             <ListItemText
                 id={"courseHeader" + course.id}
-                primary={session.name + " " + moment(session.startDate).format("D. MMMM")}
-                secondary={dateList} />
+                primary={session.name + " " + moment(session.startDate).format("D. MMMM")} />
+            {dateList}
         </label>
     </ListItem>
 
