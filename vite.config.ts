@@ -5,10 +5,10 @@ import { UserConfig } from 'vite'
 const config: UserConfig = {
   plugins: [react(), ssr()],
   server:{
-    https: true,
+    strictPort: true,
     hmr: process.env.GITPOD_WORKSPACE_URL ? {
-      host: process.env.GITPOD_WORKSPACE_URL.replace("https://", "3000-"),
-      protocol: "wss",
+      // host: process.env.GITPOD_WORKSPACE_URL.replace("https://", "3000-"),
+      protocol: "ws",
       clientPort: 443
     } : true
   }

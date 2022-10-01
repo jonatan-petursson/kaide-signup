@@ -4,7 +4,6 @@ import { ExpandMore } from '@mui/icons-material'
 import React from "react"
 import ReactMarkdown from 'react-markdown'
 import moment from "moment"
-import { SemanticClassificationFormat } from "typescript"
 
 const Courses = ({ courses }: { courses: any }) => {
     return <>
@@ -25,7 +24,7 @@ const Course = ({ course }: { course: any }) => {
                 <Sessions course={course}></Sessions>
                 <Box>
                     <Button variant={"outlined"} >
-                        Boka
+                        Bokad
                     </Button>
                 </Box>
             </form>
